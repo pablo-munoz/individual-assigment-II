@@ -76,25 +76,3 @@ if st.checkbox("Show raw data table"):
     st.write("Filtered dataset:")
     st.dataframe(data)
 
-# Chatbot interactive section
-st.subheader("Ask an Analytics Chatbot")
-if "history" not in st.session_state:
-    st.session_state.history = []
-user_input = st.text_input("Ask a question about the data or marketing strategy:")
-if user_input:
-    q = user_input.lower()
-    response = ""
-    if "best platform" in q or "top platform" in q:
-        best = mean_metrics.sort_values("Likes", ascending=False).iloc[0]["Platform"]
-        response = f"In our dataset, {best} posts have the highest average likes."
-    elif "content type" in q or "type of content" in q:
-        best_type = data.groupby("Content_Type")["Views"].mean().idxmax()
-        response = f"Content type '{best_type}' has the highest average views in the selected data."
-    elif "views" in q:
-        response = f"The average views across all posts is about {int(df['Views'].mean()):,}."
-    else:
-        response = "TikTok and YouTube posts tend to perform very well. Use filters to explore specific trends."
-    st.session_state.history.append((user_input, response))
-for user, bot in st.session_state.history:
-    st.write(f"**You:** {user_input}")
-    st.write(f"**Bot:** {response}")
