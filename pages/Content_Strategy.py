@@ -89,23 +89,3 @@ st.subheader("Likes vs Comments by Content Type")
 st.altair_chart(scatter_cc, use_container_width=True)
 
 st.markdown("*Note:* Use hashtags relevant to trending topics to improve discoverability.")
-
-# Chatbot interactive section
-st.subheader("Ask the Chatbot")
-if "history_p3" not in st.session_state:
-    st.session_state.history_p3 = []
-user_input = st.text_input("Ask a question about content strategy or engagement:")
-if user_input:
-    q = user_input.lower()
-    response = ""
-    if "best content" in q or "content type" in q:
-        best_type = data.groupby("Content_Type")["Likes"].mean().idxmax()
-        response = f"The content type '{best_type}' has the highest average likes in the filtered data."
-    elif "timing" in q or "time to post" in q:
-        response = "In general, afternoon and early evening posts tend to get more engagement. TikTok content often peaks around 4-7pm on weekdays."
-    else:
-        response = "High quality video content and popular trends drive engagement. Experiment with different formats like short videos."
-    st.session_state.history_p3.append((user_input, response))
-for user, bot in st.session_state.history_p3:
-    st.write(f"**You:** {user_input}")
-    st.write(f"**Bot:** {response}")
