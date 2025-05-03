@@ -4,8 +4,6 @@ import re
 
 
 def create_chatbot(df: pd.DataFrame):
-    """Render an interactive chatbot interface for social media analytics."""
-    st.header("🤖 Social Media Analytics Chatbot")
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
