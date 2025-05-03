@@ -108,5 +108,5 @@ if user_input:
         response = "High quality video content and popular trends drive engagement. Experiment with different formats like short videos."
     st.session_state.history_p3.append((user_input, response))
 for user, bot in st.session_state.history_p3:
-    message(user, is_user=True)
-    message(bot)
+    st.write(f"**You:** {user_input}")
+    st.write(f"**Bot:** {response}")

@@ -97,5 +97,5 @@ if user_input:
         response = "TikTok and YouTube posts tend to perform very well. Use filters to explore specific trends."
     st.session_state.history.append((user_input, response))
 for user, bot in st.session_state.history:
-    message(user, is_user=True)
-    message(bot)
+    st.write(f"**You:** {user_input}")
+    st.write(f"**Bot:** {response}")

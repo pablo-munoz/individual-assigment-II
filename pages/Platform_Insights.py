@@ -96,5 +96,5 @@ if user_input:
         response = f"Comparing platforms on {selected_metric}, TikTok and YouTube generally perform well."
     st.session_state.history_p2.append((user_input, response))
 for user, bot in st.session_state.history_p2:
-    message(user, is_user=True)
-    message(bot)
+    st.write(f"**You:** {user_input}")
+    st.write(f"**Bot:** {response}")
