@@ -78,22 +78,3 @@ count_chart = alt.Chart(post_counts).mark_bar().encode(
 st.subheader("Number of Posts by Platform")
 st.altair_chart(count_chart, use_container_width=True)
 
-# Chatbot interactive section
-st.subheader("Ask the Chatbot")
-if "history_p2" not in st.session_state:
-    st.session_state.history_p2 = []
-user_input = st.text_input("Ask a question about platform performance or strategy:")
-if user_input:
-    q = user_input.lower()
-    response = ""
-    if "prioritize" in q or "focus on" in q:
-        best = avg_by_platform.iloc[0]["Platform"] if not avg_by_platform.empty else "N/A"
-        response = f"It looks like {best} has the highest {selected_metric.lower()} in the filtered data."
-    elif "engagement rate" in q:
-        response = "TikTok and YouTube show strong engagement rates. Consider those platforms for interactive content."
-    else:
-        response = f"Comparing platforms on {selected_metric}, TikTok and YouTube generally perform well."
-    st.session_state.history_p2.append((user_input, response))
-for user, bot in st.session_state.history_p2:
-    st.write(f"**You:** {user_input}")
-    st.write(f"**Bot:** {response}")
