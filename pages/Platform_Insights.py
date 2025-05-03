@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from streamlit_chat import message
 
 # Platform Insights page
 st.title("Social Media Trends Dashboard - Platform Insights")
