@@ -7,6 +7,7 @@ Use the sidebar to navigate between:
 - 📈 Trend Overview  
 - 📊 Platform Insights  
 - 📂 Content Strategy
+- 🤖 Chatbot Assistant
 
 This dashboard helps guide marketing and platform strategy based on social media analytics.
 """)
