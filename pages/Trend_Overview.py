@@ -74,8 +74,7 @@ if total_posts > 0:
 )
 st.subheader("Post Engagement Level Breakdown")
 st.altair_chart(treemap, use_container_width=True)
-    st.subheader("Post Engagement Level Distribution")
-    st.altair_chart(eng_chart, use_container_width=True)
+    
 
 # Show raw data table on demand
 if st.checkbox("Show raw data table"):
