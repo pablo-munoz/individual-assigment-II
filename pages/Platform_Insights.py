@@ -36,6 +36,19 @@ else:
 # Sort for better visual ordering
 avg_by_platform = avg_by_platform.sort_values("Average", ascending=False)
 
+overall = avg_by_platform["Average"].mean()
+
+bars = alt.Chart(avg_by_platform).mark_bar(size=30).encode(
+    y=alt.Y("Platform:N", sort="-x", title="Platform"),
+    x=alt.X("Average:Q", title=f"Avg {selected_metric}"),
+    color=alt.Color("Platform:N", legend=None),
+    tooltip=["Platform","Average"]
+)
+benchmark = alt.Chart(pd.DataFrame({"y":[-1],"x":[overall]})).mark_rule(color="red").encode(
+    x="x:Q"
+).properties(title=f"Avg {selected_metric} by Platform (red line = overall avg)")
+st.subheader(f"Platform Comparison with Benchmark")
+st.altair_chart(bars + benchmark, use_container_width=True)
 # Bar chart of average metric by platform
 bar_chart = alt.Chart(avg_by_platform).mark_bar().encode(
     x=alt.X("Platform:N", title="Platform"),
