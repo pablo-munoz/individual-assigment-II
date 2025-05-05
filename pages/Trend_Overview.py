@@ -39,13 +39,14 @@ data_sorted["Post_Num"] = data_sorted["Post_ID"].str.extract("([0-9]+)").astype(
 data_sorted = data_sorted.sort_values("Post_Num")
 data_sorted["Bin"] = (data_sorted["Post_Num"] - 1) // 50
 avg_by_bin = data_sorted.groupby(["Bin", "Platform"])["Views"].mean().reset_index()
-line_chart = alt.Chart(avg_by_bin).mark_line(point=True).encode(
-    x=alt.X("Bin:Q", title="Post Group (earlier to later)"),
+area = alt.Chart(avg_by_bin).mark_area(opacity=0.3).encode(
+    x=alt.X("Bin:Q", title="Post Group"),
     y=alt.Y("Views:Q", title="Average Views"),
-    color=alt.Color("Platform:N", title="Platform")
-).properties(width=600, height=300)
+    color=alt.Color("Platform:N"),
+    tooltip=["Platform","Views"]
+).properties(height=300)
 st.subheader("Views Trend by Platform")
-st.altair_chart(line_chart, use_container_width=True)
+st.altair_chart(area, use_container_width=True)
 
 # Bar chart: average engagement metrics by platform
 mean_metrics = data.groupby("Platform")[["Likes", "Shares", "Comments"]].mean().reset_index()
@@ -63,11 +64,16 @@ st.altair_chart(bar_chart, use_container_width=True)
 if total_posts > 0:
     eng_counts = data["Engagement_Level"].value_counts().reset_index()
     eng_counts.columns = ["Level", "Count"]
-    eng_chart = alt.Chart(eng_counts).mark_bar().encode(
-        x=alt.X("Level:N", title="Engagement Level"),
-        y=alt.Y("Count:Q", title="Number of Posts"),
-        color=alt.Color("Level:N", legend=None)
-    ).properties(width=400, height=300)
+    treemap = alt.Chart(eng_counts).mark_rect().encode(
+    x=alt.X('sum(Count):Q', stack="normalize", axis=None),
+    y=alt.Y('sum(Count):Q', stack=None, axis=None),
+    color=alt.Color('Level:N', title="Engagement Level"),
+    tooltip=['Level','Count']
+).properties(
+    width=400, height=300, title="Engagement Level Treemap"
+)
+st.subheader("Post Engagement Level Breakdown")
+st.altair_chart(treemap, use_container_width=True)
     st.subheader("Post Engagement Level Distribution")
     st.altair_chart(eng_chart, use_container_width=True)
 
