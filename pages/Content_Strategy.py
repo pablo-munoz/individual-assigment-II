@@ -79,15 +79,14 @@ st.info("🕒 Timing Tip: Posting in the afternoon or early evening — especial
 
 # Scatter plot: likes vs comments by content type
 avg_content_eng = data.groupby("Content_Type")[["Likes","Comments"]].mean().reset_index()
-bubble = alt.Chart(content_long).mark_circle().encode(
+st.subheader("Likes Distribution by Content Type")
+box = alt.Chart(data).mark_boxplot().encode(
     x=alt.X("Content_Type:N", title="Content Type"),
-    y=alt.Y("Average:Q", title="Average Engagement"),
-    size=alt.Size("Average:Q", legend=None),
-    color=alt.Color("Metric:N"),
-    tooltip=["Content_Type","Metric","Average"]
-).properties(width=500, height=300, title="Avg Engagement by Content Type (Bubble)")
+    y=alt.Y("Likes:Q", title="Likes"),
+    color=alt.Color("Content_Type:N", legend=None),
+    tooltip=["Content_Type","Likes"]
+).properties(width=600, height=350)
 
-st.subheader("Likes vs Comments by Content Type")
-st.altair_chart(bubble, use_container_width=True)
+st.altair_chart(box, use_container_width=True)tair_chart(bubble, use_container_width=True)
 
 st.markdown("*Note:* Use hashtags relevant to trending topics to improve discoverability.")
