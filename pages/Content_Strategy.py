@@ -87,6 +87,5 @@ box = alt.Chart(data).mark_boxplot().encode(
     tooltip=["Content_Type","Likes"]
 ).properties(width=600, height=350)
 
-st.altair_chart(box, use_container_width=True)tair_chart(bubble, use_container_width=True)
-
+st.altair_chart(box, use_container_width=True)
 st.markdown("*Note:* Use hashtags relevant to trending topics to improve discoverability.")
