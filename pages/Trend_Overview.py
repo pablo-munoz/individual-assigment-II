@@ -33,20 +33,28 @@ col3.metric("Average Likes", f"{avg_likes:,}")
 # Description text
 st.write("These metrics update based on your filters. They give quick insight into the volume of posts and average engagement for the selected data.")
 
-# Line chart: trending views over grouped posts
-data_sorted = data.copy()
-data_sorted["Post_Num"] = data_sorted["Post_ID"].str.extract("([0-9]+)").astype(int)
-data_sorted = data_sorted.sort_values("Post_Num")
-data_sorted["Bin"] = (data_sorted["Post_Num"] - 1) // 50
-avg_by_bin = data_sorted.groupby(["Bin", "Platform"])["Views"].mean().reset_index()
-area = alt.Chart(avg_by_bin).mark_area(opacity=0.3).encode(
-    x=alt.X("Bin:Q", title="Post Group"),
-    y=alt.Y("Views:Q", title="Average Views"),
-    color=alt.Color("Platform:N"),
-    tooltip=["Platform","Views"]
-).properties(height=300)
-st.subheader("Views Trend by Platform")
-st.altair_chart(area, use_container_width=True)
+n_bins   = avg_by_bin["Bin"].max() + 1
+midpoint = n_bins // 2
+
+period = avg_by_bin.assign(
+    Period=lambda df: np.where(df.Bin < midpoint, "Early", "Late")
+)
+period_avg = period.groupby(["Platform","Period"])["Views"].mean().reset_index()
+
+slope = alt.Chart(period_avg).mark_line(point=True).encode(
+    x=alt.X("Period:N", sort=["Early","Late"], title="Period"),
+    y=alt.Y("Views:Q",   title="Average Views"),
+    color=alt.Color("Platform:N", title="Platform"),
+    detail="Platform:N",
+    tooltip=["Platform","Period","Views"]
+).properties(
+    width=600,
+    height=300,
+    title="Change in Avg Views: Early vs. Late"
+)
+
+st.subheader("Trend Change by Platform")
+st.altair_chart(slope, use_container_width=True)
 
 # Bar chart: average engagement metrics by platform
 mean_metrics = data.groupby("Platform")[["Likes", "Shares", "Comments"]].mean().reset_index()
