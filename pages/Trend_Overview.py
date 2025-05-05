@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-
+import numpy as np
 # Trend Overview page
 st.title("Social Media Trends Dashboard - Trend Overview")
 st.markdown("This page provides an overview of engagement and virality trends across social media platforms over time.")
