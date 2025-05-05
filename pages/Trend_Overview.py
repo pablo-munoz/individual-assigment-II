@@ -30,6 +30,17 @@ col1.metric("Total Posts", total_posts)
 col2.metric("Average Views", f"{avg_views:,}")
 col3.metric("Average Likes", f"{avg_likes:,}")
 
+data_sorted = data.copy()
+data_sorted["Post_Num"] = data_sorted["Post_ID"].str.extract(r"(\d+)").astype(int)
+data_sorted = data_sorted.sort_values("Post_Num")
+data_sorted["Bin"] = (data_sorted["Post_Num"] - 1) // 50
+
+avg_by_bin = (
+    data_sorted
+      .groupby(["Bin","Platform"])["Views"]
+      .mean()
+      .reset_index()
+)
 # Description text
 st.write("These metrics update based on your filters. They give quick insight into the volume of posts and average engagement for the selected data.")
 
