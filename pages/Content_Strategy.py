@@ -37,13 +37,13 @@ st.altair_chart(content_chart, use_container_width=True)
 # Distribution of content types (counts)
 type_counts = data["Content_Type"].value_counts().reset_index()
 type_counts.columns = ["Content_Type", "Count"]
-type_chart = alt.Chart(type_counts).mark_bar().encode(
-    x=alt.X("Content_Type:N", title="Content Type"),
-    y=alt.Y("Count:Q", title="Number of Posts"),
-    color=alt.Color("Content_Type:N", legend=None)
-).properties(width=400, height=300)
+donut = alt.Chart(type_counts).mark_arc(innerRadius=50).encode(
+    theta=alt.Theta("Count:Q", title=""),
+    color=alt.Color("Content_Type:N", legend=alt.Legend(title="Content Type")),
+    tooltip=["Content_Type","Count"]
+).properties(width=300, height=300, title="Posts by Content Type (Donut)")
 st.subheader("Distribution of Content Types")
-st.altair_chart(type_chart, use_container_width=True)
+st.altair_chart(donut, use_container_width=True)
 
 # Heatmap: average views by region and content type
 heatmap_data = data.groupby(["Region","Content_Type"])["Views"].mean().reset_index()
@@ -79,13 +79,15 @@ st.info("🕒 Timing Tip: Posting in the afternoon or early evening — especial
 
 # Scatter plot: likes vs comments by content type
 avg_content_eng = data.groupby("Content_Type")[["Likes","Comments"]].mean().reset_index()
-scatter_cc = alt.Chart(avg_content_eng).mark_circle(size=100).encode(
-    x=alt.X("Likes:Q", title="Average Likes"),
-    y=alt.Y("Comments:Q", title="Average Comments"),
-    color=alt.Color("Content_Type:N", title="Content Type"),
-    tooltip=["Content_Type","Likes","Comments"]
-).properties(width=400, height=300)
+bubble = alt.Chart(content_long).mark_circle().encode(
+    x=alt.X("Content_Type:N", title="Content Type"),
+    y=alt.Y("Average:Q", title="Average Engagement"),
+    size=alt.Size("Average:Q", legend=None),
+    color=alt.Color("Metric:N"),
+    tooltip=["Content_Type","Metric","Average"]
+).properties(width=500, height=300, title="Avg Engagement by Content Type (Bubble)")
+
 st.subheader("Likes vs Comments by Content Type")
-st.altair_chart(scatter_cc, use_container_width=True)
+st.altair_chart(bubble, use_container_width=True)
 
 st.markdown("*Note:* Use hashtags relevant to trending topics to improve discoverability.")
